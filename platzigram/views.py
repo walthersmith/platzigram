@@ -12,7 +12,6 @@ def hello_world(request):
         now=datetime.now().strftime('%b %dth, %Y - %H:%M hrs')))
 
 def hi(request): 
-    numbers = [int(i) for i in request.GET['numbers'].split(",")]
-    numbers.sort()
-    return HttpResponse(json.dumps(numbers))
+    numbers = [int(i) for i in request.GET['numbers'].split(",")] 
+    return HttpResponse(json.dumps(sorted(numbers)))
 
