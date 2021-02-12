@@ -7,7 +7,7 @@ from django.db import models
 
 class Profile(models.Model):
     """ profile Model
-    Proxi model tat extends the base data with other 
+    Proxi model that extends the base data with other 
     information"""
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
