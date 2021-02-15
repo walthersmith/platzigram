@@ -21,3 +21,14 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ('user__username','user__email','user__first_name','user__last_name','phone_number'  )
     #permite mostrar filtros para el listado 
     list_filter = ('created','modified','user__is_active','user__is_staff')
+
+    fieldsets = (
+        ('Profile',{
+            'fields':(
+                ('user','picture'),
+                ('phone_number','website'),
+            ),            
+        }),
+        
+    )
+    
