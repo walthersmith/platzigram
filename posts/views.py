@@ -1,5 +1,6 @@
 
 #Django
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 #utilities
 from datetime import datetime
@@ -34,8 +35,9 @@ posts = [
     }
 ]
 
+@login_required
 def list_post(request):
-    return render(request,'feed.html',{'posts':posts})
+    return render(request,'posts/feed.html',{'posts':posts})
 
 """
     https://docs.djangoproject.com/en/2.0/ref/templates/builtins/

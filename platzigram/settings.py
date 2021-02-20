@@ -59,7 +59,9 @@ ROOT_URLCONF = 'platzigram.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,3 +125,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    BASE_DIR / "static",
+)
+
+STATICFILES_FINDER = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
+MEDIA_URL  = '/media/'
+
+"""
+    se utliza para redirigir al usuario si no se ha logeado
+    en la vista que se desea validar se hace uso de :
+    from django.contrib.auth.decorators import login_required
+    y se valida en la vista un metodo con el decorador 
+    @login_required
+"""
+LOGIN_URL = 'login' 
