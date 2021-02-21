@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'platzigram.middleware.profileCompletionMiddleware',
 ]
 
 ROOT_URLCONF = 'platzigram.urls'
