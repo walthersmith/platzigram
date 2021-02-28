@@ -147,4 +147,4 @@ MEDIA_URL  = '/media/'
     y se valida en la vista un metodo con el decorador 
     @login_required
 """
-LOGIN_URL = 'login' 
+LOGIN_URL = 'users:login' 

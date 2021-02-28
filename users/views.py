@@ -54,7 +54,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request,user)
-            return redirect('feed') #feed es el nombre de la url en urls.py
+            return redirect('posts:feed') #feed es el nombre de la url en urls.py
         else:
             return render(request,'users/login.html',{'error':'Invalid username and password'})     
 
