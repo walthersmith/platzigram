@@ -10,13 +10,15 @@
             {% for post in posts %}
                 <div class="col-sm-12 col-md-8 offset-md-2 mt-5 p-0 post-container">
                     <div class="media pt-3 pl 3 pb-1">
-                        <img src="{{post.profile.picture.url}}" height=35 class="mr-3 rounded-circle"
-                        alt="{{ post.user.get_full_name }}">
+                        <a href=" {% url 'users:detail' post.user.username %}"> 
+                            <img src="{{post.profile.picture.url}}" height=35 class="mr-3 rounded-circle"
+                            alt="{{ post.user.get_full_name }}">
+                        </a>
                         <div class="media-body">
                             <p class="margin-top:5px">{{ post.user.get_full_name}}</p>
                         </div>
                     </div>
-                    <img src="{{ post.photo.url }}" alt="{{ post.title }}" class="width:100%">
+                    <img src="{{ post.photo.url }}" alt="{{ post.title }}" style="width:100%">
 
                     <p class="mt-1 ml-2">
                         <a href="" class="color:#000; font-size:20px;">

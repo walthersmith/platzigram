@@ -2,6 +2,8 @@
 #Django
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView
 
 #forms
 from posts.forms import PostForm
@@ -14,10 +16,23 @@ from datetime import datetime
 
 
 
-@login_required
-def list_post(request):
-    posts = Post.objects.all().order_by('-created')
-    return render(request,'posts/feed.html',{'posts':posts})
+class PostDetailView(LoginRequiredMixin,DetailView):
+    """return a especified post published"""
+
+    template_name = 'posts/detail.html'
+    model = Post
+    slug_field = 'id'
+    slug_url_kwarg = 'id_post'
+    queryset = Post.objects.all()
+
+class PostsFeedView(LoginRequiredMixin,ListView):
+    """return all published posts."""
+
+    template_name = 'posts/feed.html'
+    model = Post
+    ordering = ('-created')
+    paginate_by = 2
+    context_object_name = 'posts'
 
 """
     https://docs.djangoproject.com/en/2.0/ref/templates/builtins/

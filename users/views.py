@@ -2,17 +2,39 @@
 #django
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
+from django.views.generic import DetailView
+from django.urls import reverse
 
 #Models
 from django.contrib.auth.models import User
 from users.models import Profile
+from posts.models import Post
 
 #exceptions
 from django.db.utils import IntegrityError
 
 #forms
 from users.forms import ProfileForm
+
+class UserDetailView(LoginRequiredMixin, DetailView):
+    """ User detail View"""
+
+    template_name = 'users/details.html'
+    slug_field = 'username'
+    slug_url_kwarg= 'username' # se tiene que llamar igual  en urls.py
+    queryset = User.objects.all()
+    context_object_name = 'user'
+
+    def get_context_data(self,**kwargs):
+        """Add users posts to context"""
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
+        context['posts'] = Post.objects.filter(user=user).order_by('-created')
+        return context
+
+
 
 @login_required
 def update_profile(request):
@@ -29,7 +51,8 @@ def update_profile(request):
             profile.picture = data['picture']
             profile.save()
 
-            return redirect('update_profile')
+            url = reverse('users:detail',kwargs={'username':request.user.username})
+            return redirect(url)
     else:
         form = ProfileForm()
     return render(request=request,
@@ -86,7 +109,7 @@ def signup(request):
         profile = Profile(user=user) #se crea  perfil al usuario
         profile.save() #guardamos el objeto perfil
 
-        return redirect('login')
+        return redirect('users:login')
 
 
     return render(request,'users/signup.html')
@@ -96,7 +119,7 @@ def signup(request):
 def logout_view(request):
     """Logout View"""
     logout(request)
-    return redirect('login') 
+    return redirect('users:login') 
 
 
 
