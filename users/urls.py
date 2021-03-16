@@ -38,4 +38,9 @@ urlpatterns = [
         view= views.UserDetailView.as_view(),
         name='detail'
     ),
+    path(
+        route='profile/follow/',
+        view= views.FollowUserView.as_view(),
+        name='follow' 
+    ),
 ]

@@ -21,5 +21,11 @@ urlpatterns = [
         route='posts/<int:id_post>',
         view = views.PostDetailView.as_view(),
         name ='post_detail'
-    )
+    ),
+    path(
+        route='posts/like/',
+        view= views.LikePostView.as_view(),
+        name='like' 
+    ),
+    
 ]

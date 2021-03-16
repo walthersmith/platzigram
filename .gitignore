@@ -4,3 +4,6 @@ __pycache__/
 *.code-workspace
 media/users/pictures/*
 media/post/photos/*
+depoy/*
+platzigram/settings/*
+

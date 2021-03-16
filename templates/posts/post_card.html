@@ -1,22 +1,38 @@
-                <div class="col-sm-12 col-md-8 offset-md-2 mt-5 p-0 post-container">
-                    <div class="media pt-3 pl 3 pb-1">
+{% load humanize %}
+                <div class="col-sm-12 col-md-8 offset-md-2 mt-5 p-0 post-container shadow-sm">
+                    <div class="media pt-3 pl-3 pb-1">
                         <a href=" {% url 'users:detail' post.user.username %}"> 
                             <img src="{{post.profile.picture.url}}" height=35 class="mr-3 rounded-circle"
                             alt="{{ post.user.get_full_name }}">
                         </a>
                         <div class="media-body">
-                            <p class="margin-top:5px">{{ post.user.get_full_name}}</p>
+                            <p class="margin-top:5px">
+                                <a href=" {% url 'users:detail' post.user.username %}" style="color:#000;"> 
+                                {{ post.user.get_full_name}}
+                                </a>
+                            </p>
                         </div>
                     </div>
                     <img src="{{ post.photo.url }}" alt="{{ post.title }}" style="width:100%">
 
                     <p class="mt-1 ml-2">
-                        <a href="" class="color:#000; font-size:20px;">
-                            <i class="far fa-heart"></i>
-                        </a> 30 likes
+                        <a href="#" style="color:#000; font-size:20px;" name="post_like" id="{{post.id}}">
+                        <i  class="{% if post.total_likes >= 1 %}fas fa-heart text-danger{% else %}far fa-heart{% endif %} " id="heart{{post.id}}"></i></a>
+                          <a href="{% url 'posts:post_detail' post.pk %}" style="color:#000; font-size:20px;" name="post_comment" id="{{post.id}}">
+                            <i class="far fa-comment"></i></a>
+                        <span id='cant_likes{{post.id}}'>
+                        {% if post.total_likes > 1 %} {{post.total_likes}} likes {% else %} {{post.total_likes}} like {% endif %}
+                        </span> 
+                         <a href="{% url 'posts:post_detail' post.pk %}" 
+                style="color:#000; font-size:10px;" 
+                name="post_comment" id="{{post.id}}">{{ post.number_of_comments }} comments</a>
                     </p>
-
                     <p class="ml-2 mt-0 mb-2">
-                        <b> {{ post.title }}</b> - <small> {{ post.created }}</small>
+                        <b> {{ post.title }}</b> - <small> {{ post.created | naturaltime }}</small>
                     </p>
+                    {% if request.path not in '/' %}
+                        {% block comments %}
+                            {% include 'posts/comment.html' %}
+                        {% endblock comments %}                    
+                    {% endif %}
                 </div>

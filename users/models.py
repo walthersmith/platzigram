@@ -16,8 +16,20 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=20,blank=True)
 
     picture = models.ImageField(upload_to='users/pictures',blank=True,null=True)
+
+    follow = models.ManyToManyField(User,related_name='follow')
+
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    @property
+    def total_follows(self):
+        """
+            Likes for the post
+            :return Integer: likes for the post
+        """
+        return self.follow.count()
+
 
     def __str__(self):
         """return Username"""

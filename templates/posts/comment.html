@@ -1,0 +1,29 @@
+{% load humanize %}
+
+            <form method="POST" class="g-2 ml-2 mb-2">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <img src="{{user.profile.picture.url}}" height=30 class="mr-2 rounded-circle" alt="{{ post.user.get_full_name }}">
+                    <input type="text" class="form-control form-control-sm" id="comment" name="comment" placeholder="Add a comment">
+                    <button type="submit" class="btn btn-primary btn-sm btn-light">post</button>
+                </div>     
+                <input type="hidden" name="pk" value="{{ post.pk}}">
+            </form>
+            <div class="card border-light "  >
+                <div class="card-header">comments</div>
+                <div class="card-body">
+                {% for comment in comments %}
+                <div class="card m-1"> 
+                    <div class="card-body p-1">
+                        <a href="{% url 'users:detail' comment.user.username %}">
+                        <img src="{{comment.user.profile.picture.url}}" height=30 class="mr-2 rounded-circle" alt="{{ comment.user.get_full_name }}"></a>
+                         <span class="text-secondary">{{comment.user.username}}: </span>
+                        {{ comment.comment | safe }}
+                        <br>
+                        <small class="text-muted">{{ comment.created | naturaltime}}</small>
+                    </div>
+                </div>            
+                {% endfor %}
+                
+                </div>
+            </div>

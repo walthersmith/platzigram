@@ -2,8 +2,9 @@
 
 #django 
 from django import forms
+from django.db.models import fields
  #models
-from posts.models import Post
+from posts.models import Post, Comment
 
 
 class PostForm(forms.ModelForm):
@@ -16,3 +17,10 @@ class PostForm(forms.ModelForm):
 
 
     
+class CommentForm(forms.ModelForm):
+    """comments models form"""
+
+    class Meta:
+        """Form settings"""
+        model = Comment
+        fields =('comment',)

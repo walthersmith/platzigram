@@ -4,48 +4,47 @@
 <title>Create new post</title>
 {% endblock head_content %}
 
-{% block container %}
+{% block container %} 
     <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-6 pt-3 pb-3" id="profile-box">
-                <h4 class="mb-4">Post a new photo!</h4>
+       <div class="row">
+                <div class="col-sm-12 col-md-8 offset-md-2 mt-5 p-3 post-container" id="auth-container">
+                    <h4 class="mb-4">Post a new photo!</h4>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
+                        <input type="hidden" name="user" value="{{ user.pk}}" />
+                        <input type="hidden" name="profile" value="{{ profile.pk }}" />
 
-                    <input type="hidden" name="user" value="{{ user.pk}}" />
-                    <input type="hidden" name="profile" value="{{ profile.pk }}" />
-
-                    {# Website field #}
-                    <div class="form-group">
-                        <input
-                            class="form-control {% if form.title.errors %}is-invalid{% endif %}"
-                            type="text"
-                            name="title"
-                            placeholder="Title"
-                        >
-                        <div class="invalid-feedback">
-                            {% for error in form.title.errors %}{{ error }}{% endfor %}
+                        {# Website field #}
+                        <div class="form-group">
+                            <input
+                                class="form-control {% if form.title.errors %}is-invalid{% endif %}"
+                                type="text"
+                                name="title"
+                                placeholder="Title"
+                            >
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}{{ error }}{% endfor %}
+                            </div>
                         </div>
-                    </div>
 
-                    {# Photo field #}
-                    <div class="form-group">
-                        <label>Choose your photo:</label>
-                        <input
-                            class="form-control {% if form.photo.errors %}is-invalid{% endif %}"
-                            type="file"
-                            name="photo"
-                            placeholder="photo"
-                        >
-                        <div class="invalid-feedback">
-                            {% for error in form.photo.errors %}{{ error }}{% endfor %}
+                        {# Photo field #}
+                        <div class="form-group">
+                            <label>Choose your photo:</label>
+                            <input
+                                class="form-control {% if form.photo.errors %}is-invalid{% endif %}"
+                                type="file"
+                                name="photo"
+                                placeholder="photo"
+                            >
+                            <div class="invalid-feedback">
+                                {% for error in form.photo.errors %}{{ error }}{% endfor %}
+                            </div>
                         </div>
-                    </div>
 
-                    <button type="submit" class="btn btn-primary btn-block mt-5">Publish!</button>
-                </form>
-            </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-5">Publish!</button>
+                    </form> 
+                </div>
         </div>
     </div>
 {% endblock container %}

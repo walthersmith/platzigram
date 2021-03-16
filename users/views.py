@@ -1,12 +1,19 @@
 """Users Views"""
 #django
 #from django.contrib.auth import authenticate,login,logout
+from django.http.response import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import views as auth_views
 #from django.shortcuts import render, redirect
-from django.views.generic import DetailView, FormView, UpdateView
+from django.views.generic import DetailView, FormView, UpdateView,CreateView
 from django.urls import reverse, reverse_lazy
+from django.shortcuts import get_object_or_404
+
+try:
+    from django.utils import simplejson as json
+except ImportError:
+    import json
 
 #Models
 from django.contrib.auth.models import User
@@ -34,7 +41,12 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         user = self.get_object()
         context['posts'] = Post.objects.filter(user=user).order_by('-created')
+        context['following'] = Profile.objects.filter(follow=self.request.user,pk=user.id).exists()
         return context
+
+    #def get(self,request,**kwargs):
+    #    pass
+
 
 class SignupView(FormView):
     """Users sign up view"""
@@ -75,3 +87,22 @@ class LogoutView(LoginRequiredMixin,auth_views.LogoutView):
     template_name = 'users/logged_out.html'   
 
 
+
+class FollowUserView(LoginRequiredMixin,CreateView):
+    def post(self,request,**kwargs):
+        user = self.request.user
+        profile = get_object_or_404(Profile,id=request.POST.get('id'))
+        profile_follow = get_object_or_404(Profile,id=request.POST.get('id'))
+        if profile.follow.filter(id=user.id).exists():
+            #user has already liked this post
+            #remove like/user
+            profile.follow.remove(user)
+            message ='0'
+        else:
+            #add a new like for post
+            profile.follow.add(user)
+            message = '1'        
+        ctx = {'follow_count':profile.total_follows,'follow':message,'total_follows':profile_follow.total_follows}
+        print(ctx)
+        #use minitype instead of content_type if django < 5
+        return HttpResponse(json.dumps(ctx), content_type='application/json')

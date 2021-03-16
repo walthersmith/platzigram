@@ -1,0 +1,33 @@
+#!/bin/bash
+
+NAME="platzigram"
+VIRTUALENV="/home/kajto/.venv/"
+DJANGODIR="/home/kajto/platzigram/"
+USER=kajto
+GROUP=sudo
+NUM_WORKERS=3
+DJANGO_WSGI_MODULE=platzigram.wsgi
+
+echo "Starting $NAME as `whoami`"
+
+cd $VIRTUALENV
+source bin/activate
+cd $DJANGODIR
+
+export PLATZI_SECRET_KEY="_^=k(a^df0!i)9#l@9(ynf-__gvh-!xnw#sd*9oxoqjnn^t)+i"
+
+export PLATZI_DB_NAME="platzi"
+export PLATZI_DB_USER="kajto"
+export PLATZI_DB_PASSWORD="lemon"
+export PLATZI_DB_PORT="5432"
+export PLATZI_DB_HOST="localhost"
+
+export DJANGO_SETTINGS_MODULE="platzigram.settings.prod"
+
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+
+exec gunicorn ${DJANGO_WSGI_MODULE} \
+        --workers $NUM_WORKERS \
+        --user=$USER --group=$GROUP \
+        --log-level=debug \
+        --bind=127.0.0.1:8000

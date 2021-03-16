@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width , initial-scale=1" />
     {% block head_content %}{% endblock head_content %}
 
     {% load static %}
@@ -16,5 +17,73 @@
         {% block container %}
         {% endblock container %}
     </div>
+
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script>
+        $("a[name='post_like']").on('click',function(e){
+            e.preventDefault() 
+            var  likes = $(this).attr('id')
+            $.ajax({
+                type: "POST",
+                url:  "{% url 'posts:like' %}",
+                data: {'id_post':$(this).attr('id'),'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: "json",
+                success:function(response){
+                    if (response.total_likes == 0 ){
+                        $("#heart"+likes).attr('class',"far fa-heart text-dark");
+                        $("#cant_likes"+likes).text(response.likes_count + " likes");
+                    }else{
+                        $("#heart"+likes).attr('class',"fas fa-heart text-danger");
+                        $("#cant_likes"+likes).text(response.likes_count + " likes");   
+                    }
+                    //alert(likes);
+                },
+                error: function(rs,e){
+                    alert(rs.responseText)
+                }
+            });
+            
+        });
+
+        $("button[name='follow']").on('click',function(e){
+            e.preventDefault() 
+            var  follow = $(this).attr('id')
+            $.ajax({
+                type: "POST",
+                url:  "{% url 'users:follow' %}",
+                data: {'id':$(this).attr('id'),'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: "json",
+                success:function(response){
+                    if (response.follow == 0 ){
+                        $("#buttonfollow>button").text("Follow");
+                        $("#buttonfollow>button").attr("class","ml-5 btn btn-sm btn-primary");   
+                        $("#followers").text(response.follow_count);   
+                    }else{
+                        $("#buttonfollow>button").text("Following");
+                        $("#buttonfollow>button").attr("class","ml-5 btn btn-sm btn-outline-secondary");
+                        $("#followers").text(response.follow_count);   
+                    }
+                    //alert(likes);
+                },
+                error: function(rs,e){
+                    alert(rs.responseText)
+                }
+            });            
+        });
+
+            $("button[name='follow']").hover(function(e){
+                if($(this).text().trim()=="Following"){
+                    $("#buttonfollow>button").text('Unfollow');
+                    $("#buttonfollow>button").attr("class","ml-5 btn btn-sm btn-danger");   
+                }
+            },function(){
+                if($(this).text().trim()=="Unfollow"){
+                    $("#buttonfollow>button").text("Following");
+                    $("#buttonfollow>button").attr("class","ml-5 btn btn-sm btn-outline-secondary");   
+                }
+            });
+        
+    </script>
 </body>
 </html>
